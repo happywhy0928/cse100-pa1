@@ -172,10 +172,10 @@ class BST {
         vector<Data> result;
         if (root) {
             BSTNode<Data>* firstE = first(this->root);
-            BSTNode<Data>* next;
+            BSTNode<Data>* next = first(this->root);
             result.push_back(firstE->data);
-            while (firstE->successor() != nullptr) {
-                next = firstE->successor();
+            while (next->successor() != nullptr) {
+                next = next->successor();
                 result.push_back(next->data);
             }
         }
