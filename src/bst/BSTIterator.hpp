@@ -32,11 +32,21 @@ class BSTIterator : public iterator<input_iterator_tag, Data> {
         return before;
     }
 
-    /** TODO */
-    bool operator==(BSTIterator<Data> const& other) const { return false; }
+    /**
+     * equality test operator.
+     * Return: true(1) if equal / false(0) if inequal
+     */
+    bool operator==(BSTIterator<Data> const& other) const {
+        return curr == other.curr;
+    }
 
-    /** TODO */
-    bool operator!=(BSTIterator<Data> const& other) const { return false; }
+    /**
+     * inequality test operatior.
+     * Return: true(1) if inequal/ false(0) if equal
+     */
+    bool operator!=(BSTIterator<Data> const& other) const {
+        return curr != other.curr;
+    }
 };
 
 #endif  // BSTITERATOR_HPP
