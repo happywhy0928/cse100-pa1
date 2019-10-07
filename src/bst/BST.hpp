@@ -205,14 +205,16 @@ class BST {
         delete n;
     }
     vector<Data> inorder(BSTNode<Data>* n) const {
-        BSTNode<Data>* current = n;
-        if (current->left) {
-            inorder(current->left);
-        }
         vector<Data> result;
-        result.push_back(current->data);
-        if (current->right) {
-            inorder(current->right);
+        if (n) {
+            BSTNode<Data>* current = n;
+            if (current->left) {
+                inorder(current->left);
+            }
+            result.push_back(current->data);
+            if (current->right) {
+                inorder(current->right);
+            }
         }
         return result;
     }
