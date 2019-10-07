@@ -41,7 +41,6 @@ class BSTNode {
             }
             return current;
         }
-
         // Case2: curr does not have a right child
         else {
             current = current->parent;
@@ -49,12 +48,16 @@ class BSTNode {
                 // traverse up until current node is its current's left child
                 if (current->left == this) {
                     return current;
-                } else {
-                    current = current->parent;
+                }
+                current = current->parent;
+                if (current) {
+                    if (this->data < current->data) {
+                        return current;
+                    }
                 }
             }
-            return nullptr;
         }
+        return nullptr;
     }
 };
 

@@ -49,7 +49,7 @@ class BST {
         if (!root) {
             root = new BSTNode<Data>(item);
             isize++;
-            iheight = 0;
+            iheight++;
             return 1;
         }
 
@@ -57,7 +57,8 @@ class BST {
         BSTNode<Data>* current = root;
         BSTNode<Data>* prev = nullptr;
 
-        int numOfHeight = 0;
+        // we set empty BST as height -1 (to set equally)
+        int numOfHeight = -1;
 
         // start the travse
         while (current != 0) {
@@ -112,18 +113,18 @@ class BST {
      */
     virtual iterator find(const Data& item) const {
         if (empty()) {
-            return 0;
+            return end();
         }
 
         BSTNode<Data>* current = root;
         // start the while loop of search
-        while (current) {
+        while (current != 0) {
             // if less than the current data, then search left part
             if (item < current->data) {
                 current = current->left;
             }
             // if larger than the current data, then search right part
-            if (current->data < item) {
+            else if (current->data < item) {
                 current = current->right;
             }
             // we found the equal data
