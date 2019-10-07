@@ -168,7 +168,19 @@ class BST {
     /**
      * print the element in BST in ascending order
      */
-    vector<Data> inorder() const { return inorder(root); }
+    vector<Data> inorder() const {
+        vector<Data> result;
+        if (root) {
+            BSTNode<Data>* firstE = first(this->root);
+            BSTNode<Data>* next;
+            result.push_back(firstE->data);
+            while (firstE->successor() != nullptr) {
+                next = firstE->successor();
+                result.push_back(next->data);
+            }
+        }
+        return result;
+    }
 
   private:
     /**
@@ -203,20 +215,6 @@ class BST {
             deleteAll(n->right);
         }
         delete n;
-    }
-    vector<Data> inorder(BSTNode<Data>* n) const {
-        vector<Data> result;
-        if (n) {
-            BSTNode<Data>* current = n;
-            if (current->left) {
-                inorder(current->left);
-            }
-            result.push_back(current->data);
-            if (current->right) {
-                inorder(current->right);
-            }
-        }
-        return result;
     }
 };
 
