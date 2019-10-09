@@ -80,8 +80,7 @@ class BST {
         }
         // smaller than previous, then go left
         if (item < prev->data) {
-            current = prev->left;
-            current = new BSTNode<Data>(item);
+            current = prev->left = new BSTNode<Data>(item);
             current->parent = prev;
             if (!prev->right) {
                 numOfHeight++;
@@ -89,8 +88,7 @@ class BST {
         }
         // if larger than previous, then go right
         else {
-            current = prev->right;
-            current = new BSTNode<Data>(item);
+            current = prev->right = new BSTNode<Data>(item);
             current->parent = prev;
             if (!prev->left) {
                 numOfHeight++;
