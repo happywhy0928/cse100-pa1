@@ -57,5 +57,37 @@ TEST_F(SmallBSTFixture, SMALL_INSERT_DUPLICATES_TEST) {
     // assert failed duplicate insertion
     ASSERT_FALSE(bst.insert(3));
 }
-
-// TODO: add more BST tests here
+TEST_F(SmallBSTFixture, SMALL_height_TEST) {
+    // assert that the small BST has the correct height
+    ASSERT_EQ(bst.height(), 2);
+}
+TEST_F(SmallBSTFixture, SMALL_empty_TEST) {
+    // assert that the small BST is not empty
+    ASSERT_EQ(bst.empty(), false);
+}
+TEST_F(SmallBSTFixture, SMALL_inorder_TEST) {
+    // assert that the small BST is printed in correct order
+    vector<int> result{-33, 1, 3, 4, 100};
+    ASSERT_EQ(bst.inorder(), result);
+}
+TEST_F(SmallBSTFixture, SMALL_begin_TEST) {
+    // assert that the small BST first element
+    BSTIterator<int> iter(bst.find(1));
+    iter = bst.begin();
+    ASSERT_EQ(iter.operator*(), -33);
+}
+TEST_F(SmallBSTFixture, SMALL_find_TEST) {
+    // assert that the small BST find element
+    BSTIterator<int> iter(bst.find(100));
+    ASSERT_EQ(iter.operator*(), 100);
+    BSTIterator<int> last(bst.find(1));
+    last = bst.find(200);
+    ASSERT_EQ(last, nullptr);
+}
+TEST_F(SmallBSTFixture, SMALL_operator_TEST) {
+    // check the two different operator
+    BSTIterator<int> last(bst.find(1));
+    BSTIterator<int> iter(bst.find(100));
+    ASSERT_EQ(last.operator==(iter), false);
+    ASSERT_EQ(last.operator!=(iter), true);
+}
