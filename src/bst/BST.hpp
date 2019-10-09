@@ -50,7 +50,7 @@ class BST {
             root = new BSTNode<Data>(item);
             isize++;
             iheight++;
-            return 1;
+            return true;
         }
 
         // initialize pointer to root to start
@@ -75,12 +75,13 @@ class BST {
                 current = current->right;
                 numOfHeight++;
             } else {
-                return 0;
+                return false;
             }
         }
         // smaller than previous, then go left
         if (item < prev->data) {
-            current = prev->left = new BSTNode<Data>(item);
+            current = prev->left;
+            current = new BSTNode<Data>(item);
             current->parent = prev;
             if (!prev->right) {
                 numOfHeight++;
@@ -88,7 +89,8 @@ class BST {
         }
         // if larger than previous, then go right
         else {
-            current = prev->right = new BSTNode<Data>(item);
+            current = prev->right;
+            current = new BSTNode<Data>(item);
             current->parent = prev;
             if (!prev->left) {
                 numOfHeight++;
@@ -100,7 +102,7 @@ class BST {
             iheight = numOfHeight;
         }
         isize++;
-        return 1;
+        return true;
     }
     /**
      * Search the BST for the given item existed or not
@@ -190,7 +192,7 @@ class BST {
     static BSTNode<Data>* first(BSTNode<Data>* root) {
         BSTNode<Data>* current = root;
         if (!current) {
-            return 0;
+            return nullptr;
         }
         while (current->left) {
             current = current->left;
