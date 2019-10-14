@@ -64,7 +64,7 @@ class KDT {
         if (points.size() == 0) {
             return;
         }
-
+        numDim = points[0].numDim;
         root = nullptr;
         iheight = -1;
         isize = points.size();
@@ -115,8 +115,9 @@ class KDT {
         sort(it + start, it + end, comp);
         int mid = (start + end - 1) / 2;
         KDNode* curr = new KDNode(points[mid]);
-        curDim = curDim + 1;
+        numDim = points[0].numDim;
         if (end - start > 1) {
+            curDim = curDim + 1;
             curDim = curDim % numDim;
             height = height + 1;
             curr->left = buildSubtree(points, start, mid, curDim, height);
@@ -175,12 +176,12 @@ class KDT {
         if (n == nullptr) {
             return;
         }
-        if (n->left) {
-            deleteAll(n->left);
-        }
-        if (n->right) {
-            deleteAll(n->right);
-        }
+     //   if (n->left != nullptr) {
+     //       deleteAll(n->left);
+     //   }
+      //  if (n->right != nullptr) {
+    //        deleteAll(n->right);
+     //   }
         delete n;
     }
 
