@@ -71,7 +71,9 @@ class KDT {
         root = buildSubtree(points, 0, points.size(), 0, 0);
     }
 
-    /** TODO */
+    /**
+     *
+     */
     Point* findNearestNeighbor(Point& queryPoint) {
         KDNode* curr = root;
         if (curr == nullptr) {
@@ -100,13 +102,17 @@ class KDT {
     int height() const { return iheight; }
 
   private:
-    /** TODO */
+    /**
+     *
+     */
     KDNode* buildSubtree(vector<Point>& points, unsigned int start,
                          unsigned int end, unsigned int curDim, int height) {
         if (start >= end) {
             return nullptr;
         }
-        sort(start, end, CompareValueAt(curDim));
+        CompareValueAt comp(curDim);
+        vector<Point>::iterator it = points.begin();
+        sort(it + start, it + end, comp);
         int mid = (start + end - 1) / 2;
         KDNode* curr = new KDNode(points[mid]);
         curDim = curDim + 1;
@@ -122,7 +128,9 @@ class KDT {
         return curr;
     }
 
-    /** TODO */
+    /**
+     *
+     */
     void findNNHelper(KDNode* node, Point& queryPoint, unsigned int curDim) {
         // KDNode * temp = findFirstGuess(root,queryPoint,0);
         KDNode* curr = node;
@@ -160,7 +168,9 @@ class KDT {
                            vector<pair<double, double>>& queryRegion,
                            unsigned int curDim) {}
 
-    /** TODO */
+    /**
+     *
+     */
     static void deleteAll(KDNode* n) {
         if (n == nullptr) {
             return;
