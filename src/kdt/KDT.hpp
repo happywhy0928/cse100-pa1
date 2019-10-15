@@ -64,21 +64,22 @@ class KDT {
         if (points.size() == 0) {
             return;
         }
+        isize = 0;
         numDim = points[0].numDim;
         root = nullptr;
         iheight = -1;
-        isize = points.size();
         root = buildSubtree(points, 0, points.size(), 0, 0);
+        isize = points.size();
     }
 
     /**
      *
      */
     Point* findNearestNeighbor(Point& queryPoint) {
-        KDNode* curr = root;
-        if (curr == nullptr) {
+        if (root == nullptr) {
             return nullptr;
         }
+        KDNode* curr = root;
         queryPoint.setDistToQuery(curr->point);
         findNNHelper(curr, queryPoint, 0);
         return &(curr->point);
@@ -139,27 +140,25 @@ class KDT {
         double smallestSquare = queryPoint.distToQuery;
         double squareDistance =
             pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
-        if (curr->left != nullptr && squareDistance <= smallestSquare) {
-            // if(squareDistance <= smallestSquare){
-            //  return;
-            //
-            curr = curr->left;
-            curDim = curDim + 1;
-            curDim = curDim % numDim;
-            findNNHelper(curr, queryPoint, curDim);
-        }
-        if (curr->right != nullptr && squareDistance <= smallestSquare) {
-            curr = curr->right;
-            curDim = curDim + 1;
-            curDim = curDim % numDim;
-            findNNHelper(curr, queryPoint, curDim);
-        }
         if (squareDistance <= smallestSquare) {
-            queryPoint.setDistToQuery(curr->point);
-            double check = queryPoint.distToQuery;
+            if (curr->left != nullptr) {
+                curr = curr->left;
+                curDim = curDim + 1;
+                curDim = curDim % numDim;
+                findNNHelper(curr, queryPoint, curDim);
+            }
+            if (curr->right != nullptr) {
+                curr = curr->right;
+                curDim = curDim + 1;
+                curDim = curDim % numDim;
+                findNNHelper(curr, queryPoint, curDim);
+            }
+            curr->point.setDistToQuery(queryPoint);
+            double check = curr->point.distToQuery;
             if (check <= smallestSquare) {
                 node = curr;
                 smallestSquare = check;
+                queryPoint.setDistToQuery(node->point);
             }
         }
     }
@@ -176,30 +175,13 @@ class KDT {
         if (n == nullptr) {
             return;
         }
-     //   if (n->left != nullptr) {
-     //       deleteAll(n->left);
-     //   }
-      //  if (n->right != nullptr) {
-    //        deleteAll(n->right);
-     //   }
+        //  if (n->left != nullptr) {
+        //      deleteAll(n->left);
+        // }
+        //   if (n->right != nullptr) {
+        //    deleteAll(n->right);
+        // }
         delete n;
-    }
-
-    // Add your own helper methods here
-    KDNode* findFirstGuess(KDNode* node, Point& queryPoint,
-                           unsigned int curDim) {
-        KDNode* result = node;
-        while (result != nullptr) {
-            if (result->point.valueAt(curDim) <= queryPoint.valueAt(curDim)) {
-                curDim = curDim + 1;
-                result = result->left;
-            } else {
-                curDim = curDim + 1;
-                result = result->right;
-            }
-            curDim = curDim % numDim;
-        }
-        return result;
     }
 };
 #endif  // KDT_HPP
