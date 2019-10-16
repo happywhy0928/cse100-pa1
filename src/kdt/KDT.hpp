@@ -99,6 +99,7 @@ class KDT {
         //       }
         //     curr = curr->right;
         //  }
+
         threshold = 99999;
         nearestNeighbor = root->point;
         isize = points.size();
@@ -123,7 +124,7 @@ class KDT {
         //     }
         //     abC = abC->left;
         //  }
-        threshold = 99999;
+        threshold = 999999999;
         queryPoint.setDistToQuery(curr->point);
         findNNHelper(curr, queryPoint, 0);
         Point* result = &nearestNeighbor;
@@ -160,12 +161,15 @@ class KDT {
         if (start >= end) {
             return nullptr;
         }
+        curDim = curDim % numDim;
         CompareValueAt comp(curDim);
         vector<Point>::iterator it = points.begin();
         sort(it + start, it + end, comp);
         int mid = (start + end - 1) / 2;
         KDNode* curr = new KDNode(points[mid]);
-        vector<double> x = curr->point.features;
+        curr->left = nullptr;
+        curr->right = nullptr;
+        // vector<double> x = curr->point.features;
         numDim = points[0].numDim;
         if (end - start > 1) {
             // curDim = curDim + 1;
@@ -190,6 +194,7 @@ class KDT {
             return;
         }
         KDNode* curr = node;
+        curDim = curDim % numDim;
         //       queryPoint.setDistToQuery(node->point);
         threshold = queryPoint.distToQuery;
         //        std::cout << curr->point.features << "/num";
@@ -229,12 +234,12 @@ class KDT {
         if (n == nullptr) {
             return;
         }
-        //  if (n->left) {
-        //   deleteAll(n->left);
-        //   }
-        //  if (n->right) {
-        //      deleteAll(n->right);
-        //   }
+           if (n->left) {
+             deleteAll(n->left);
+          }
+          if (n->right) {
+            deleteAll(n->right);
+          }
         delete n;
     }
 };
