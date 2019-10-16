@@ -1,6 +1,7 @@
 #ifndef KDT_HPP
 #define KDT_HPP
 
+#include <bits/stdc++.h>
 #include <math.h>     // pow, abs
 #include <algorithm>  // sort, max, min
 #include <limits>     // numeric_limits<type>::max()
@@ -124,9 +125,9 @@ class KDT {
         //     }
         //     abC = abC->left;
         //  }
-        threshold = 999999999;
+
+        threshold = INT_MAX;
         queryPoint.setDistToQuery(curr->point);
-        threshold = queryPoint.distToQuery;
         findNNHelper(curr, queryPoint, 0);
         Point* result = &nearestNeighbor;
         if (result != nullptr) {
