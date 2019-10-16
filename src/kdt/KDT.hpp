@@ -69,6 +69,38 @@ class KDT {
         root = nullptr;
         iheight = -1;
         root = buildSubtree(points, 0, points.size(), 0, 0);
+        //   std::cout << root->point.features << "/n";
+        //   std::cout << root->left->point.features << "/n";
+        //   std::cout << root->right->point.features << "/n";
+        //   std::cout << root->left->right->point.features << "/n";
+        //   std::cout << root->right->right->point.features << "/n";
+        //   if (!root->right->right->right->point.features.empty()) {
+        //       std::cout << "abc";
+        //   }
+        // KDNode* curr = root;
+        // while (curr) {
+        //     std::cout << curr->point.features << "/n";
+        //    if (curr->left) {
+        //       std::cout << curr->left->point.features << "/l";
+        //   }
+        //     if (curr->right) {
+        //         std::cout << curr->right->point.features << "/r        ";
+        //     }
+        //     curr = curr->left;
+        // }
+        // curr = root;
+        //   while (curr) {
+        ///      std::cout << curr->point.features << "/n";
+        //       if (curr->left) {
+        //          std::cout << curr->left->point.features << "/l";
+        //      }
+        //      if (curr->right) {
+        //           std::cout << curr->right->point.features << "/r";
+        //       }
+        //     curr = curr->right;
+        //  }
+        threshold = 99999;
+        nearestNeighbor = root->point;
         isize = points.size();
     }
 
@@ -80,9 +112,26 @@ class KDT {
             return nullptr;
         }
         KDNode* curr = root;
+        //  KDNode* abC = root;
+        //  while (abC) {
+        //      std::cout << abC->point.features << "/n";
+        //     if (abC->left) {
+        //         std::cout << abC->left->point.features << "/l";
+        //     }
+        //     if (abC->right) {
+        //         std::cout << abC->right->point.features << "/r        ";
+        //     }
+        //     abC = abC->left;
+        //  }
+        threshold = 99999;
         queryPoint.setDistToQuery(curr->point);
         findNNHelper(curr, queryPoint, 0);
-        return &(curr->point);
+        Point* result = &nearestNeighbor;
+        if (result != nullptr) {
+            return result;
+        } else {
+            return nullptr;
+        }
     }
 
     /** Extra credit */
@@ -116,6 +165,7 @@ class KDT {
         sort(it + start, it + end, comp);
         int mid = (start + end - 1) / 2;
         KDNode* curr = new KDNode(points[mid]);
+        vector<double> x = curr->point.features;
         numDim = points[0].numDim;
         if (end - start > 1) {
             curDim = curDim + 1;
@@ -135,30 +185,33 @@ class KDT {
      */
     void findNNHelper(KDNode* node, Point& queryPoint, unsigned int curDim) {
         // KDNode * temp = findFirstGuess(root,queryPoint,0);
+        if (!node) {
+            return;
+        }
         KDNode* curr = node;
-        // queryPoint.setDistToQuery(node->point);
-        double smallestSquare = queryPoint.distToQuery;
+        //       queryPoint.setDistToQuery(node->point);
+        threshold = queryPoint.distToQuery;
+        //        std::cout << curr->point.features << "/num";
         double squareDistance =
             pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
-        if (squareDistance <= smallestSquare) {
+        if (squareDistance <= threshold) {
             if (curr->left != nullptr) {
-                curr = curr->left;
                 curDim = curDim + 1;
                 curDim = curDim % numDim;
-                findNNHelper(curr, queryPoint, curDim);
+                findNNHelper(curr->left, queryPoint, curDim);
             }
             if (curr->right != nullptr) {
-                curr = curr->right;
                 curDim = curDim + 1;
                 curDim = curDim % numDim;
-                findNNHelper(curr, queryPoint, curDim);
+                findNNHelper(curr->right, queryPoint, curDim);
             }
             curr->point.setDistToQuery(queryPoint);
             double check = curr->point.distToQuery;
-            if (check <= smallestSquare) {
-                node = curr;
-                smallestSquare = check;
-                queryPoint.setDistToQuery(node->point);
+            // std::cout << check << "/num";
+            if (check <= threshold) {
+                nearestNeighbor = curr->point;
+                threshold = check;
+                queryPoint.setDistToQuery(curr->point);
             }
         }
     }
@@ -175,12 +228,12 @@ class KDT {
         if (n == nullptr) {
             return;
         }
-        //  if (n->left != nullptr) {
-        //      deleteAll(n->left);
-        // }
-        //   if (n->right != nullptr) {
-        //    deleteAll(n->right);
-        // }
+        //  if (n->left) {
+        //   deleteAll(n->left);
+        //   }
+        //  if (n->right) {
+        //      deleteAll(n->right);
+        //   }
         delete n;
     }
 };
