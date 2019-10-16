@@ -101,7 +101,7 @@ class KDT {
         //  }
 
         // threshold = 99999;
-        // nearestNeighbor = root->point;
+        nearestNeighbor = root->point;
         isize = points.size();
     }
 
@@ -126,7 +126,7 @@ class KDT {
         //  }
         threshold = 999999999;
         queryPoint.setDistToQuery(curr->point);
-        // threshold = queryPoint.distToQuery;
+        threshold = queryPoint.distToQuery;
         findNNHelper(curr, queryPoint, 0);
         Point* result = &nearestNeighbor;
         if (result != nullptr) {
@@ -202,6 +202,16 @@ class KDT {
         double squareDistance =
             pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
         if (squareDistance <= threshold) {
+            if (curr->left != nullptr) {
+                //  curDim = curDim + 1;
+                curDim = curDim % numDim;
+                findNNHelper(curr->left, queryPoint, curDim + 1);
+            }
+            if (curr->right != nullptr) {
+                //  curDim = curDim + 1;
+                curDim = curDim % numDim;
+                findNNHelper(curr->right, queryPoint, curDim + 1);
+            }
             curr->point.setDistToQuery(queryPoint);
             double check = curr->point.distToQuery;
             // std::cout << check << "/num";
@@ -210,24 +220,6 @@ class KDT {
                 threshold = check;
                 // queryPoint.setDistToQuery(curr->point);
             }
-            if (curr->left != nullptr) {
-                //  curDim = curDim + 1;
-                // curDim = curDim % numDim;
-                findNNHelper(curr->left, queryPoint, curDim + 1);
-            }
-            if (curr->right != nullptr) {
-                //  curDim = curDim + 1;
-                // curDim = curDim % numDim;
-                findNNHelper(curr->right, queryPoint, curDim + 1);
-            }
-            //     curr->point.setDistToQuery(queryPoint);
-            //  double check = curr->point.distToQuery;
-            // std::cout << check << "/num";
-            //  if (check <= threshold) {
-            //      nearestNeighbor = curr->point;
-            //      threshold = check;
-            // queryPoint.setDistToQuery(curr->point);
-            //  }
         }
     }
 
