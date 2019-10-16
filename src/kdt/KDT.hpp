@@ -168,11 +168,12 @@ class KDT {
         vector<double> x = curr->point.features;
         numDim = points[0].numDim;
         if (end - start > 1) {
-            curDim = curDim + 1;
+            // curDim = curDim + 1;
             curDim = curDim % numDim;
             height = height + 1;
-            curr->left = buildSubtree(points, start, mid, curDim, height);
-            curr->right = buildSubtree(points, mid + 1, end, curDim, height);
+            curr->left = buildSubtree(points, start, mid, curDim + 1, height);
+            curr->right =
+                buildSubtree(points, mid + 1, end, curDim + 1, height);
         }
         if (iheight < height) {
             iheight = height;
@@ -196,14 +197,14 @@ class KDT {
             pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
         if (squareDistance <= threshold) {
             if (curr->left != nullptr) {
-                curDim = curDim + 1;
+                //  curDim = curDim + 1;
                 curDim = curDim % numDim;
-                findNNHelper(curr->left, queryPoint, curDim);
+                findNNHelper(curr->left, queryPoint, curDim + 1);
             }
             if (curr->right != nullptr) {
-                curDim = curDim + 1;
+                //  curDim = curDim + 1;
                 curDim = curDim % numDim;
-                findNNHelper(curr->right, queryPoint, curDim);
+                findNNHelper(curr->right, queryPoint, curDim + 1);
             }
             curr->point.setDistToQuery(queryPoint);
             double check = curr->point.distToQuery;
