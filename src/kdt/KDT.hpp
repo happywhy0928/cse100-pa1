@@ -192,10 +192,6 @@ class KDT {
      * already set to the nearest neighbor.
      */
     void findNNHelper(KDNode* node, Point& queryPoint, unsigned int curDim) {
-        // check if the given node is nullptr or not
-        if (node == nullptr) {
-            return;
-        }
         KDNode* curr = node;
         curDim = curDim % numDim;
         // first recursively find the leaf node as first candidate to
@@ -203,7 +199,8 @@ class KDT {
         if (curr->point.valueAt(curDim) >= queryPoint.valueAt(curDim) &&
             curr->left != nullptr) {
             findNNHelper(curr->left, queryPoint, (curDim + 1) % numDim);
-        } else {
+        } else if (curr->point.valueAt(curDim) < queryPoint.valueAt(curDim) &&
+                   curr->right != nullptr) {
             findNNHelper(curr->right, queryPoint, (curDim + 1) % numDim);
         }
         // compare with the threshold to check update or not
@@ -217,14 +214,17 @@ class KDT {
         }
         // traverse up to check if the single dimension distance is less than
         // the threshold or not, if is less than the threshold than check
-        // current children
+        // current other child
         curDim = curDim % numDim;
         double SingDistance =
             pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
         if (SingDistance < threshold) {
-            if (curr->point.valueAt(curDim) >= queryPoint.valueAt(curDim)) {
+            if (curr->point.valueAt(curDim) >= queryPoint.valueAt(curDim) &&
+                curr->right != nullptr) {
                 findNNHelper(curr->right, queryPoint, (curDim + 1) % numDim);
-            } else {
+            } else if (curr->point.valueAt(curDim) <
+                           queryPoint.valueAt(curDim) &&
+                       curr->left != nullptr) {
                 findNNHelper(curr->left, queryPoint, (curDim + 1) % numDim);
             }
         }
