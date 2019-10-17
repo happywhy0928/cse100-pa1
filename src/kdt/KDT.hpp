@@ -200,12 +200,6 @@ class KDT {
         double squareDistance =
             pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
         if (squareDistance <= threshold) {
-                        curr->point.setDistToQuery(queryPoint);
-            double check = curr->point.distToQuery;
-            if (check <= threshold) {
-                nearestNeighbor = curr->point;
-                threshold = check;
-            }
             // if smaller, then check its child recursively
             if (curr->left != nullptr) {
                 //  curDim = curDim % numDim;
@@ -217,12 +211,12 @@ class KDT {
             }
             // check the current square distance in all dimension
             // then compare with the threshold to check update or not
-           // curr->point.setDistToQuery(queryPoint);
-           // double check = curr->point.distToQuery;
-           // if (check <= threshold) {
-           //     nearestNeighbor = curr->point;
-           //     threshold = check;
-          //  }
+            curr->point.setDistToQuery(queryPoint);
+            double check = curr->point.distToQuery;
+            if (check <= threshold) {
+                nearestNeighbor = curr->point;
+                threshold = check;
+            }
         }
     }
 
