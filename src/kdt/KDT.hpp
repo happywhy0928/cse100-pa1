@@ -191,32 +191,56 @@ class KDT {
      * already set to the nearest neighbor.
      */
     void findNNHelper(KDNode* node, Point& queryPoint, unsigned int curDim) {
+        if (node == nullptr) {
+            return;
+        }
         KDNode* curr = node;
         curDim = curDim % numDim;
-        // first check the square distance in the current dimension and compare
-        // with threshold to see continue or not
-        double squareDistance =
+        if (curr->point.valueAt(curDim) >= queryPoint.valueAt(curDim) &&
+            curr->left != nullptr) {
+            findNNHelper(curr->left, queryPoint, (curDim + 1) % numDim);
+        } else {
+            findNNHelper(curr->right, queryPoint, (curDim + 1) % numDim);
+        }
+        curr->point.setDistToQuery(queryPoint);
+        double check = curr->point.distToQuery;
+        if (check <= threshold) {
+            threshold = check;
+            nearestNeighbor = curr->point;
+        }
+        curDim = curDim % numDim;
+        double SingDistance =
             pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
-        if (squareDistance <= threshold) {
-            // if smaller, then check its child recursively
-            if (curr->left != nullptr) {
-                curDim = curDim % numDim;
-                findNNHelper(curr->left, queryPoint, curDim + 1);
-            }
-            if (curr->right != nullptr) {
-                curDim = curDim % numDim;
-                findNNHelper(curr->right, queryPoint, curDim + 1);
-            }
-            // check the current square distance in all dimension
-            // then compare with the threshold to check update or not
-            curr->point.setDistToQuery(queryPoint);
-            double check = curr->point.distToQuery;
-            if (check <= threshold) {
-                nearestNeighbor = curr->point;
-                threshold = check;
+        if (SingDistance < threshold) {
+            if (curr->point.valueAt(curDim) >= queryPoint.valueAt(curDim)) {
+                findNNHelper(curr->right, queryPoint, (curDim + 1) % numDim);
+            } else {
+                findNNHelper(curr->left, queryPoint, (curDim + 1) % numDim);
             }
         }
     }
+
+    // first check the square distance in the current dimension and compare
+    // with threshold to see continue or not
+    //    double squareDistance =
+    //   pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
+    //   if (squareDistance <= threshold) {
+    // if smaller, then check its child recursively
+    //      if (curr->left != nullptr) {
+    //          curDim = curDim % numDim;
+    //         findNNHelper(curr->left, queryPoint, curDim + 1);
+    //      }
+    //      if (curr->right != nullptr) {
+    //       curDim = curDim % numDim;
+    //        findNNHelper(curr->right, queryPoint, curDim + 1);
+    //    }
+    // check the current square distance in all dimension
+    // then compare with the threshold to check update or not
+    //   curr->point.setDistToQuery(queryPoint);
+    //   double check = curr->point.distToQuery;
+    //   if (check <= threshold) {
+    //       nearestNeighbor = curr->point;
+    //       threshold = check;
 
     /** Extra credit */
     void rangeSearchHelper(KDNode* node, vector<pair<double, double>>& curBB,
