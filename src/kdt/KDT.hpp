@@ -193,11 +193,13 @@ class KDT {
      */
     void findNNHelper(KDNode* node, Point& queryPoint, unsigned int curDim) {
         KDNode* curr = node;
-        curDim = (curDim - 1) % numDim;
+        curDim = curDim % numDim;
         // first check the square distance in the current dimension and compare
         // with threshold to see continue or not
         double squareDistance =
-            pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
+            pow(curr->point.valueAt((curDim - 1) % numDim) -
+                    queryPoint.valueAt((curDim - 1) % numDim),
+                2.0);
         if (squareDistance <= threshold) {
             // if smaller, then check its child recursively
             if (curr->left != nullptr) {
