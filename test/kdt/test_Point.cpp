@@ -31,4 +31,10 @@ TEST(PointTests, TEST_DISTANCE) {
 
     p1.setDistToQuery(p2);
     ASSERT_DOUBLE_EQ(p1.distToQuery, 1.0);
+    double check1 = p1.valueAt(0);
+    ASSERT_DOUBLE_EQ(check1, 3.0);
+    bool check2 = p1.operator==(p2);
+    ASSERT_EQ(check2, false);
+    bool check3 = p1.operator!=(p2);
+    ASSERT_EQ(check3, true);
 }
