@@ -148,7 +148,7 @@ class KDT {
         sort(it + start, it + end, comp);
         // set the mid point in the sorting points as current node and continue
         // to build subtree if there are any other points
-        int mid = (start + end - 1) / 2;
+        int mid = (start + end) / 2;
         KDNode* curr = new KDNode(points[mid]);
         // initialize the new build KDNode
         curr->left = nullptr;
@@ -194,12 +194,12 @@ class KDT {
     void findNNHelper(KDNode* node, Point& queryPoint, unsigned int curDim) {
         KDNode* curr = node;
         curDim = curDim % numDim;
-        //first check the square distance in the current dimension and compare with 
-        //threshold to see continue or not
+        // first check the square distance in the current dimension and compare
+        // with threshold to see continue or not
         double squareDistance =
             pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
         if (squareDistance <= threshold) {
-            //if smaller, then check its child recursively
+            // if smaller, then check its child recursively
             if (curr->left != nullptr) {
                 curDim = curDim % numDim;
                 findNNHelper(curr->left, queryPoint, curDim + 1);
@@ -208,8 +208,8 @@ class KDT {
                 curDim = curDim % numDim;
                 findNNHelper(curr->right, queryPoint, curDim + 1);
             }
-            //check the current square distance in all dimension
-            //then compare with the threshold to check update or not
+            // check the current square distance in all dimension
+            // then compare with the threshold to check update or not
             curr->point.setDistToQuery(queryPoint);
             double check = curr->point.distToQuery;
             if (check <= threshold) {
@@ -225,23 +225,22 @@ class KDT {
                            unsigned int curDim) {}
 
     /**
-     * the method delete all the node in the subtree staring from the parameter node
-     * Parameter:
-     * KDNode* n : the starting point of the subtree to delete
+     * the method delete all the node in the subtree staring from the parameter
+     * node Parameter: KDNode* n : the starting point of the subtree to delete
      */
     static void deleteAll(KDNode* n) {
-        //check if the current node is existed or not
+        // check if the current node is existed or not
         if (n == nullptr) {
             return;
         }
-        //first recursively delete all its children 
+        // first recursively delete all its children
         if (n->left) {
             deleteAll(n->left);
         }
         if (n->right) {
             deleteAll(n->right);
         }
-        //finally delete itself
+        // finally delete itself
         delete n;
     }
 };
