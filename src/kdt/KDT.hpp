@@ -148,7 +148,7 @@ class KDT {
         sort(it + start, it + end, comp);
         // set the mid point in the sorting points as current node and continue
         // to build subtree if there are any other points
-        int mid = (start + end) / 2;
+        int mid = floor((start + end) / 2);
         KDNode* curr = new KDNode(points[mid]);
         // initialize the new build KDNode
         curr->left = nullptr;
