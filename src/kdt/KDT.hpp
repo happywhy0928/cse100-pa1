@@ -173,12 +173,13 @@ class KDT {
 
     /**
      * the method find the nearest neighbor point existed in the parameter
-     * node's subtree Firstly, we set the node as the first potential nearest
+     * node's subtree
+     * Firstly, we search the leaf node as the first potential nearest
      * neighbor and then check if the square distance between the current
      * dimension value compared with the threshold if the square distance is
      * smaller than the threshold, then continue to check its child if exists
      * (different method to the discussion)
-     * by searching down to the leaf, check the square distance for all
+     * by searching up, check the square distance for all
      * dimension and compare with the threshold and update the threshold
      * Parameter:
      * KDNode* node: the node with subtree to start search the nearest neighbor
@@ -191,23 +192,32 @@ class KDT {
      * already set to the nearest neighbor.
      */
     void findNNHelper(KDNode* node, Point& queryPoint, unsigned int curDim) {
+        // check if the given node is nullptr or not
         if (node == nullptr) {
             return;
         }
         KDNode* curr = node;
         curDim = curDim % numDim;
+        // first recursively find the leaf node as first candidate to
+        // nearest neighbor
         if (curr->point.valueAt(curDim) >= queryPoint.valueAt(curDim) &&
             curr->left != nullptr) {
             findNNHelper(curr->left, queryPoint, (curDim + 1) % numDim);
         } else {
             findNNHelper(curr->right, queryPoint, (curDim + 1) % numDim);
         }
+        // compare with the threshold to check update or not
+        // if current square distance is less than the threshold, also update
+        // the pointer to the current point.
         curr->point.setDistToQuery(queryPoint);
         double check = curr->point.distToQuery;
         if (check <= threshold) {
             threshold = check;
             nearestNeighbor = curr->point;
         }
+        // traverse up to check if the single dimension distance is less than
+        // the threshold or not, if is less than the threshold than check
+        // current children
         curDim = curDim % numDim;
         double SingDistance =
             pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
@@ -219,29 +229,6 @@ class KDT {
             }
         }
     }
-
-    // first check the square distance in the current dimension and compare
-    // with threshold to see continue or not
-    //    double squareDistance =
-    //   pow(curr->point.valueAt(curDim) - queryPoint.valueAt(curDim), 2.0);
-    //   if (squareDistance <= threshold) {
-    // if smaller, then check its child recursively
-    //      if (curr->left != nullptr) {
-    //          curDim = curDim % numDim;
-    //         findNNHelper(curr->left, queryPoint, curDim + 1);
-    //      }
-    //      if (curr->right != nullptr) {
-    //       curDim = curDim % numDim;
-    //        findNNHelper(curr->right, queryPoint, curDim + 1);
-    //    }
-    // check the current square distance in all dimension
-    // then compare with the threshold to check update or not
-    //   curr->point.setDistToQuery(queryPoint);
-    //   double check = curr->point.distToQuery;
-    //   if (check <= threshold) {
-    //       nearestNeighbor = curr->point;
-    //       threshold = check;
-
     /** Extra credit */
     void rangeSearchHelper(KDNode* node, vector<pair<double, double>>& curBB,
                            vector<pair<double, double>>& queryRegion,
