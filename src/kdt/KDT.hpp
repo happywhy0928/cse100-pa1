@@ -73,7 +73,6 @@ class KDT {
         root = nullptr;
         iheight = -1;
         root = buildSubtree(points, 0, points.size(), 0, 0);
-        nearestNeighbor = root->point;
         isize = points.size();
     }
 
@@ -92,7 +91,7 @@ class KDT {
         }
         KDNode* curr = root;
         // initialize the threshold each time for method call to compare
-        threshold = INT_MAX;
+        threshold = numeric_limits<double>::max();
         queryPoint.setDistToQuery(curr->point);
         findNNHelper(curr, queryPoint, 0);
         Point* result = &nearestNeighbor;
