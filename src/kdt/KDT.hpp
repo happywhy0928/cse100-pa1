@@ -157,13 +157,12 @@ class KDT {
         numDim = points[0].numDim;
         // check if there are other points remaining to build
         if (end - start > 1) {
-            // curDim = curDim % numDim;
+            curDim = curDim % numDim;
             height = height + 1;
             // continue to build the remain points
-            curr->left =
-                buildSubtree(points, start, mid, (curDim + 1) % numDim, height);
-            curr->right = buildSubtree(points, mid + 1, end,
-                                       (curDim + 1) % numDim, height);
+            curr->left = buildSubtree(points, start, mid, curDim + 1, height);
+            curr->right =
+                buildSubtree(points, mid + 1, end, curDim + 1, height);
         }
         // check the current height of kdt and update
         if (iheight < height) {
@@ -194,7 +193,7 @@ class KDT {
      */
     void findNNHelper(KDNode* node, Point& queryPoint, unsigned int curDim) {
         KDNode* curr = node;
-        curDim = curDim % numDim;
+        curDim = (curDim - 1) % numDim;
         // first check the square distance in the current dimension and compare
         // with threshold to see continue or not
         double squareDistance =
@@ -202,12 +201,12 @@ class KDT {
         if (squareDistance <= threshold) {
             // if smaller, then check its child recursively
             if (curr->left != nullptr) {
-                //  curDim = curDim % numDim;
-                findNNHelper(curr->left, queryPoint, (curDim + 1) % numDim);
+                curDim = curDim % numDim;
+                findNNHelper(curr->left, queryPoint, curDim + 1);
             }
             if (curr->right != nullptr) {
-                // curDim = curDim % numDim;
-                findNNHelper(curr->right, queryPoint, (curDim + 1) % numDim);
+                curDim = curDim % numDim;
+                findNNHelper(curr->right, queryPoint, curDim + 1);
             }
             // check the current square distance in all dimension
             // then compare with the threshold to check update or not
